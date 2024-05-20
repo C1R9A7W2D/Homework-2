@@ -17,12 +17,13 @@ public class Player extends GameObject {
 
     public void Update()
     {
-        CheckReloadTimer();
+        if (!destroyed)
+            CheckReloadTimer();
     }
 
     private void CheckReloadTimer()
     {
-        if (!loaded) {
+        if (!destroyed && !loaded) {
             if (reloadTimer <= 0) {
                 reloadTimer = RELOAD_TIME;
                 loaded = true;
@@ -39,20 +40,24 @@ public class Player extends GameObject {
 
     public void SetAngle(int gunAngle)
     {
-        this.gunAngle = gunAngle;
+        if (!destroyed)
+            this.gunAngle = gunAngle;
     }
 
     public void SetSpeed(int speed)
     {
-        this.speed = speed;
+        if (!destroyed)
+            this.speed = speed;
     }
 
     public void Shoot()
     {
-        Coords coords = this.GetCoords();
-        Projectile projectile = new Projectile(coords);
-        GameWorld.getInstance().AddProjectile(projectile);
-        loaded = false;
+        if (!destroyed) {
+            Coords coords = this.GetCoords();
+            Projectile projectile = new Projectile(coords);
+            GameWorld.getInstance().AddProjectile(projectile);
+            loaded = false;
+        }
     }
 
     public int GetReloadTime()

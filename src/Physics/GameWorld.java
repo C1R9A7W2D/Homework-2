@@ -94,20 +94,33 @@ public class GameWorld {
             projectiles.forEach(pr ->
                     CheckPlayerAndProjectileCollision(pr, pCoords, p)
             );
+
+            final int pRad = p.GetRadius();
+            if (pCoords.x() + pRad >= WORLD_SIZE.x())
+                p.SetCoordsX(WORLD_SIZE.x() - pRad);
+            else if (pCoords.x() - pRad <= 0)
+                p.SetCoordsX(pRad);
+
+            if (pCoords.y() + p.GetRadius() >= WORLD_SIZE.y())
+                p.SetCoordsY(WORLD_SIZE.y() - pRad);
+            else if (pCoords.y() - pRad <= 0)
+                p.SetCoordsY(pRad);
         }
     }
 
-    private static void CheckPlayerAndBonusCollision(Bonus b, Coords pCoords, Player p) {
+    private void CheckPlayerAndBonusCollision(Bonus b, Coords pCoords, Player p) {
         var bCoords = b.GetCoords();
         if (pCoords.GetDistance(bCoords) < p.GetRadius() + b.GetRadius()) {
             p.UpdateHp(b.HP_GAIN);
+            bonuses.remove(b);
         }
     }
 
-    private static void CheckPlayerAndProjectileCollision(Projectile pr, Coords pCoords, Player p) {
+    private void CheckPlayerAndProjectileCollision(Projectile pr, Coords pCoords, Player p) {
         var prCoords = pr.GetCoords();
         if (pCoords.GetDistance(prCoords) < p.GetRadius() + pr.GetRadius()) {
             p.UpdateHp(-1);
+            projectiles.remove(pr);
         }
     }
 }

@@ -19,4 +19,14 @@ public class GameObject {
     {
         return RADIUS;
     }
+
+    public void SetCoordsX(int x)
+    {
+        coords = new Coords(x, coords.y());
+    }
+
+    public void SetCoordsY(int y)
+    {
+        coords = new Coords(coords.x(), y);
+    }
 }
